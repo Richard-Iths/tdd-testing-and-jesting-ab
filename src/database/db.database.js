@@ -7,6 +7,7 @@ class Database {
         name: "Anders",
         password: "grillkorv",
         login: "grillkorv",
+        role: "user"
       },
     ],
     products: [

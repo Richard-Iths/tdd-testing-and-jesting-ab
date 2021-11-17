@@ -5,8 +5,8 @@
   "main": "server.mjs",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "test":"jest ./src/**/*.test.js",
-    "test:watch":"jest --watchAll ./src/**/*.test.js"
+    "test": "jest ./src/**/*.test.js",
+    "test:watch": "jest --watchAll ./src/**/*.test.js"
   },
   "keywords": [],
   "author": "",

@@ -21,7 +21,7 @@ class Database {
         price: 500,
       },
     ],
-    user_products: [
+    carts: [
       {
         userId: "990s89da9a9fua9uf9",
         productId: "8948108401sjfaj",
@@ -45,6 +45,7 @@ class Database {
       if (!query || !params) {
         return this.db[table] && resolve("OK");
       }
+      reject("Not found.")
     });
   }
 }

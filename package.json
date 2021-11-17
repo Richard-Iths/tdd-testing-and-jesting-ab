@@ -1,0 +1,22 @@
+{
+  "name": "tdd-testing-and-jesting-ab",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.mjs",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "test":"jest ./src/**/*.test.js",
+    "test:watch":"jest --watchAll ./src/**/*.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15"
+  },
+  "type": "module"
+}

@@ -1,25 +1,43 @@
 import { jest } from "@jest/globals";
-import db from "./db.database";
+import db from "./db.database.js";
 
 describe("db.database.js", () => {
-  it("should have table for users", async () => {
-    const expected = "OK";
-    const testData = "users";
-    const result = await db.getFrom(testData);
-    expect(result).toBe(expected);
+  it("should have table for users", (done) => {
+    function callback(_, row) {
+      try {
+        expect(row).toBeTruthy();
+        done();
+      } catch (error) {
+        done(error);
+      }
+    }
+    const query = "PRAGMA table_info(users);";
+    db.get(query, callback);
   });
 
-  it("should have table for products", async () => {
-    const expected = "OK";
-    const testData = "products";
-    const result = await db.getFrom(testData);
-    expect(result).toBe(expected);
-  })
+  it("should have table for products", (done) => {
+    function callback(_, row) {
+      try {
+        expect(row).toBeTruthy();
+        done();
+      } catch (error) {
+        done(error);
+      }
+    }
+    const query = "PRAGMA table_info(products);";
+    db.get(query, callback);
+  });
 
-  it("should have table for carts", async () => {
-    const expected = "OK";
-    const testData = "carts";
-    const result = await db.getFrom(testData);
-    expect(result).toBe(expected);
-  })
+  it("should have table for carts", (done) => {
+    function callback(_, row) {
+      try {
+        expect(row).toBeTruthy();
+        done();
+      } catch (error) {
+        done(error);
+      }
+    }
+    const query = "PRAGMA table_info(user_product);";
+    db.get(query, callback);
+  });
 });

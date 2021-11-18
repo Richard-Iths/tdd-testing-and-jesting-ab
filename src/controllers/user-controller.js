@@ -32,7 +32,7 @@ async function loginUser(req, res, next) {
 //delete user account DELETE
 async function deleteUser(req, res, next) {
     try {
-        const { id } = req.params //?
+        const { id } = req.params 
         const user = await Usermodel.deleteUser(id)
         res.json({ message: `User successfully deleted` })
     } catch (error) {

@@ -5,8 +5,8 @@
   "main": "server.mjs",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "test": "jest ./src/**/*.test.js",
-    "test:watch": "jest --watchAll ./src/**/*.test.js"
+    "test:ci":"node --experimental-vm-modules node_modules/jest/bin/jest.js ./src/**/*.test.js",
+    "test:watch":"node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll ./src/**/*.test.js"
   },
   "keywords": [],
   "author": "",

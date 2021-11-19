@@ -9,6 +9,8 @@ const sequelize = new Sequelize({
   host: "0,0,0,0",
   dialect: "sqlite",
   storage: join(dir, dbFilename),
+  logging: false,
+  
 });
 
 const UsersModel = usersModel(sequelize, Sequelize);

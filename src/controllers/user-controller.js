@@ -6,12 +6,12 @@ import db from "../database/db.database"
 //register user POST
 async function registerUser(req, res, next) {
     try {
-        const { name, password, login, role } = req.body
+        const { name, password, login, role  } = req.body
         if (!name || !password || !login) {
             throw new Error()
         }
 
-        await db.UsersModel.createUser({name, password, login, role})
+        await db.UsersModel.create({name, password, login, role})
             return res.json({
                 data: { message: "success" }
             })
@@ -23,8 +23,9 @@ async function registerUser(req, res, next) {
 async function loginUser(req, res, next) { 
     try {
         const { login, password } = req.body;
+        await db.UsersModel.authenticate(password, login)
         res.json({
-            data: { login, password }
+            data: { message: "success" }
         })
     } catch (error) {
         next(error)

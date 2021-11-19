@@ -4,6 +4,8 @@ import express from "express";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+await db.sync(db.sequelize, false);
+
 app.use(express.json());
 // app.use("/users", userRoutes)
 app.get("/", (req, res, next) => {

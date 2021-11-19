@@ -13,14 +13,17 @@ const sequelize = new Sequelize({
 
 const UsersModel = usersModel(sequelize, Sequelize);
 
-const init = async (sequelize) => {
+const init = async (sequelize, force) => {
   try {
-    await sequelize.sync();
+    await sequelize.sync({ force });
     console.log("db synced");
   } catch (e) {
     console.log(e);
   }
 };
-await init(sequelize);
 
-export default { db: sequelize, UsersModel }
+export default {
+  sequelize,
+  UsersModel,
+  sync: init,
+};

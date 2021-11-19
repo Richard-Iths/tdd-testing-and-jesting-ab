@@ -12,7 +12,7 @@ async function registerUser(req, res, next) {
         }
 
         await db.UsersModel.createUser({name, password, login, role})
-            res.json({
+            return res.json({
                 data: { message: "success" }
             })
     } catch (error) {

@@ -1,4 +1,4 @@
-//Importera usermodel
+import UsersModel from "../database/db.database"
 import db from "../database/db.database"
 //Importera sequelize
 //importera user-routes
@@ -6,24 +6,25 @@ import db from "../database/db.database"
 //register user POST
 async function registerUser(req, res, next) {
     try {
-        const { name, password, login, role } = req.body;
-        if (!name || !password || !login ||!role) {
+        const { name, password, login, role } = req.body
+        if (!name || !password || !login) {
             throw new Error()
         }
-        const user = await db.UsersModel.createUser(name, password, login)
+
+        await db.UsersModel.createUser({name, password, login, role})
             res.json({
-                data: { message } 
-            });
+                data: { message: "success" }
+            })
     } catch (error) {
-        next(error);
+        next(error)
     }
 }
 //login user GET
 async function loginUser(req, res, next) { 
     try {
-        const { name, login, role } = req.body;
+        const { login, password } = req.body;
         res.json({
-            data: { name, login, role }
+            data: { login, password }
         })
     } catch (error) {
         next(error)
@@ -33,7 +34,7 @@ async function loginUser(req, res, next) {
 async function deleteUser(req, res, next) {
     try {
         const { id } = req.params 
-        const user = await db.UsersModel.deleteUser(id)
+        await db.UsersModel.deleteUser(id)
         res.json({ message: `User successfully deleted` })
     } catch (error) {
         next(error)
@@ -44,7 +45,7 @@ async function deleteUser(req, res, next) {
 async function getUser(req, res, next) {
     try {
         const { id } = req.params //? Ta bort?
-        const user = await db.UsersModel.findByPk(id);
+        await db.UsersModel.findByPk(id);
 
         if(!user) {
             throw new Error()

@@ -1,5 +1,10 @@
 export default (sequelize, Sequelize) => {
   const User = sequelize.define("User", {
+    user_id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+    },
     name: {
       type: Sequelize.STRING,
       allowNull: false,
@@ -25,19 +30,11 @@ export default (sequelize, Sequelize) => {
   });
   User.authenticate = async (password, login) => {
     const user = await User.findOne({ where: { login } });
-    if (user) {
-      if (user.password === password) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      throw new Error("User Not Registered");
+    if (!user || user.password !== password) {
+      throw new Error("invalid credentials");
     }
+    return user;
   };
+
   return User;
 };
-
-
-
-

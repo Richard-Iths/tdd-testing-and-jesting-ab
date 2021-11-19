@@ -15,7 +15,7 @@ const UsersModel = usersModel(sequelize, Sequelize);
 
 const init = async (sequelize) => {
   try {
-    await sequelize.sync();
+    await sequelize.sync({force:true});
     console.log("db synced");
   } catch (e) {
     console.log(e);

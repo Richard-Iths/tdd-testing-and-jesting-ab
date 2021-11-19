@@ -1,9 +1,9 @@
 import userController from "./user-controller";
 
 describe("user controller", () => {
-    it("should be able to get all users", () => {
-        const expected = [];
-        const actual = userController.getUsers();
+    it("should be able to get all users", async () => {
+        const expected = {};
+        const actual = await userController.getUsers();
 
         expect(actual).toStrictEqual(expected);
     });

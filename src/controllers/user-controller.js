@@ -1,5 +1,5 @@
 //Importera usermodel
-//importera fake db
+import db from "../database/db.database"
 //Importera sequelize
 //importera user-routes
 
@@ -58,7 +58,7 @@ async function getUser(req, res, next) {
 async function getUsers(req, res, next) {
     try {
         const users = await Usermodel.getUsers()
-            res.json({ data })
+            res.json({ data:users })
     } catch(error) {
         next(error)
     }

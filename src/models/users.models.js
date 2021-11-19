@@ -1,45 +1,45 @@
-import db from "../database";
-import { DataTypes } from "sequelize";
-
-const User = db.define("User", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  login: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: {
-      args: true,
-      msg: " Username taken",
+export default (sequelize, Sequelize) => {
+  const User = sequelize.define("User", {
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-  },
-  role: {
-    type: DataTypes.STRING,
-    enum: ["user", "admin"],
-    defaultValue: "user",
-    allowNull: false,
-  },
-});
-User.authenticate = async (password, login) => {
-  const user = await User.findOne({ where: { login } });
-  if (user) {
-    if (user.password === password) {
-      return true;
+    password: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    login: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: {
+        args: true,
+        msg: " Username taken",
+      },
+    },
+    role: {
+      type: Sequelize.STRING,
+      enum: ["user", "admin"],
+      defaultValue: "user",
+      allowNull: false,
+    },
+  });
+  User.authenticate = async (password, login) => {
+    const user = await User.findOne({ where: { login } });
+    if (user) {
+      if (user.password === password) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      throw new Error("User Not Registered");
     }
-  } else {
-    throw new Error("User Not Registered");
-  }
+  };
+  return User;
 };
 
 //create user to database
-async function createUser(name, login, password, role) {
+export async function createUser(name, login, password, role) {
   const user = await User.create({ name, password, login, role });
   if (user) {
     return { message: "succesfuly register a new user" };
@@ -83,10 +83,10 @@ async function deleteUser(id) {
   }
 }
 
-export default {
-  login,
-  getUsers,
-  getUser,
-  createUser,
-  deleteUser,
-};
+// export default {
+//   login,
+//   getUsers,
+//   getUser,
+//   createUser,
+//   deleteUser,
+// };

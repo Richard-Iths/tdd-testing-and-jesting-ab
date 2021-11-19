@@ -4,11 +4,11 @@
   "description": "",
   "main": "server.mjs",
   "scripts": {
-    "dev": "node ./src/database/migrations.database.js && npm run dev:seed",
-    "dev:seed":"node ./src/database/seed.database.js && npm run dev:start",
-    "dev:start":"nodemon src/server.js",
+    "dev": "npm run --silent dev:seed",
+    "dev:seed": "node ./src/database/seed.database.js && npm run dev:start",
+    "dev:start": "nodemon src/server.js",
     "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js ./src/**/*.test.js",
-    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll ./src/**/*.test.js"
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watchAll"
   },
   "keywords": [],
   "author": "",

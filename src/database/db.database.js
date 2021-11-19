@@ -23,7 +23,4 @@ const init = async (sequelize) => {
 };
 await init(sequelize);
 
-export default {
-  db: sequelize,
-  UsersModel,
-};
+export default { db: sequelize, UsersModel }

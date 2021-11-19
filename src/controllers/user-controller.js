@@ -10,7 +10,7 @@ async function registerUser(req, res, next) {
         if (!name || !password || !login ||!role) {
             throw new Error()
         }
-        const user = await Usermodel.createUser()
+        const user = await db.UsersModel.createUser(name, password, login)
             res.json({
                 data: { message } 
             });
@@ -33,7 +33,7 @@ async function loginUser(req, res, next) {
 async function deleteUser(req, res, next) {
     try {
         const { id } = req.params 
-        const user = await Usermodel.deleteUser(id)
+        const user = await db.UsersModel.deleteUser(id)
         res.json({ message: `User successfully deleted` })
     } catch (error) {
         next(error)
@@ -44,7 +44,7 @@ async function deleteUser(req, res, next) {
 async function getUser(req, res, next) {
     try {
         const { id } = req.params //? Ta bort?
-        const user = await Usermodel.getUser(id);
+        const user = await db.UsersModel.findByPk(id);
 
         if(!user) {
             throw new Error()
@@ -57,7 +57,7 @@ async function getUser(req, res, next) {
 
 async function getUsers(req, res, next) {
     try {
-        const users = await Usermodel.getUsers()
+        const users = await db.UsersModel.findAll()
             res.json({ data:users })
     } catch(error) {
         next(error)

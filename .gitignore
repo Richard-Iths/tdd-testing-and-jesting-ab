@@ -3,3 +3,4 @@ node_modules
 .env.local
 .vscode
 src/database/testing-and-jesting.db
+src/database/testing-and-jesting.sqlite

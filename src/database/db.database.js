@@ -1,11 +1,29 @@
-import sqlite3 from "sqlite3";
+import { Sequelize } from "sequelize";
+import { resolve, join } from "path";
+import usersModel from "../models/users.models.js";
 
-const db = new sqlite3.Database("./src/database/testing-and-jesting.db");
+const dir = resolve("./src/database/");
+const dbFilename = "testing-and-jesting.sqlite";
 
-export const tableNames = {
-  USERS: "users",
-  PRODUCTS: "products",
-  CART: "user_product",
+const sequelize = new Sequelize({
+  host: "0,0,0,0",
+  dialect: "sqlite",
+  storage: join(dir, dbFilename),
+});
+
+const UsersModel = usersModel(sequelize, Sequelize);
+
+const init = async (sequelize) => {
+  try {
+    await sequelize.sync();
+    console.log("db synced");
+  } catch (e) {
+    console.log(e);
+  }
 };
+await init(sequelize);
 
-export default db;
+export default {
+  db: sequelize,
+  UsersModel,
+};

@@ -1,5 +1,5 @@
-import { Router } from "express"
-import userController from "../controllers/user-controller";
+import { Router } from "express";
+import userController from "../controllers/user-controller.js";
 const router = new Router();
 
 router.get("/users", userController.getUsers);
@@ -8,4 +8,4 @@ router.post("/users", userController.registerUser);
 router.post("/users/login", userController.loginUser);
 router.delete("/users/:id", userController.deleteUser);
 
-export default router
+export default router;

@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize";
 import { resolve, join } from "path";
 import usersModel from "../models/users.models.js";
+import productsModel from "../models/products.model.js";
 
 const dir = resolve("./src/database/");
 const dbFilename = "testing-and-jesting.sqlite";
@@ -10,10 +11,10 @@ const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: join(dir, dbFilename),
   logging: false,
-  
 });
 
 const UsersModel = usersModel(sequelize, Sequelize);
+const ProductsModel = productsModel(sequelize, Sequelize);
 
 const init = async (sequelize, force) => {
   try {
@@ -27,5 +28,6 @@ const init = async (sequelize, force) => {
 export default {
   sequelize,
   UsersModel,
+  ProductsModel,
   sync: init,
 };

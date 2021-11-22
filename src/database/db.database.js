@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import { resolve, join } from "path";
 import usersModel from "../models/users.models.js";
 import productsModel from "../models/products.model.js";
+import cartsModel from "../models/carts.model.js";
 
 const dir = resolve("./src/database/");
 const dbFilename = "testing-and-jesting.sqlite";
@@ -15,6 +16,16 @@ const sequelize = new Sequelize({
 
 const UsersModel = usersModel(sequelize, Sequelize);
 const ProductsModel = productsModel(sequelize, Sequelize);
+const CartsModel = cartsModel(sequelize, Sequelize);
+
+UsersModel.belongsToMany(ProductsModel, {
+  through: CartsModel,
+  foreignKey: "user_id",
+});
+ProductsModel.belongsToMany(UsersModel, {
+  through: CartsModel,
+  foreignKey: "product_id",
+});
 
 const init = async (sequelize, force) => {
   try {

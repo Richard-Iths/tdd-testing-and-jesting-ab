@@ -6,7 +6,7 @@ import db from "./database/db.database.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-await db.sync(db.sequelize, false);
+await db.sync(db.sequelize, true);
 
 app.use(express.json());
 // app.use("/users", userRoutes)

@@ -1,5 +1,5 @@
-import UsersModel from "../database/db.database"
-import db from "../database/db.database"
+
+import db from "../database/db.database.js"
 //Importera sequelize
 //importera user-routes
 

@@ -20,6 +20,25 @@ describe("user endpoints", () => {
       .catch((err) => done(err));
   });
 
+  it("should be able to get own profile", (done)=>{
+    request
+    .get("/api/users/:id")
+    .expect(200)
+    .expect("Content-Type", /json/)
+    .then(()=>{
+      server.close(()=>done())
+      
+    })
+    .catch((err) => done(err))
+
+  })
+
+
+
+
+
+
+
   it("should create a single user", (done) => {
     request
       .post("/api/users",)
@@ -61,3 +80,7 @@ describe("user endpoints", () => {
   });
 
 });
+
+// should be able to delete account
+// should be able to get own profile
+// should throw error when wrong login credentials

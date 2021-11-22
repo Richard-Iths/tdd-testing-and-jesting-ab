@@ -35,7 +35,7 @@ async function loginUser(req, res, next) {
 async function deleteUser(req, res, next) {
     try {
         const { id } = req.params 
-        await db.UsersModel.deleteUser(id)
+        await db.UsersModel.destroy({where: {user_id: id}})
         res.json({ message: `User successfully deleted` })
     } catch (error) {
         next(error)
@@ -46,7 +46,7 @@ async function deleteUser(req, res, next) {
 async function getUser(req, res, next) {
     try {
         const { id } = req.params //? Ta bort?
-        await db.UsersModel.findByPk(id);
+        const user = await db.UsersModel.findByPk(id);
 
         if(!user) {
             throw new Error()

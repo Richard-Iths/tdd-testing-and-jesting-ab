@@ -1,8 +1,8 @@
-import supertest from "supertest";
-import router from "./user-routes";
 import { jest } from "@jest/globals";
-import server from "../server";
-import db from "../database/db.database";
+jest.useFakeTimers() //?
+import supertest from "supertest";
+import server from "../server.js";
+import db from "../database/db.database.js";
 await db.sync(db.sequelize, true);
 
 const request = supertest(server);
@@ -13,70 +13,75 @@ describe("user endpoints", () => {
       .get("/api/users")
       .expect(200)
       .expect("Content-Type", /json/)
-      .then( () => {
-         server.close(()=>done())
-       
+      .then(() => {
+        server.close(() => done())
+
       })
       .catch((err) => done(err));
   });
 
-  it("should be able to get own profile", (done)=>{
+  it("should be able to get own profile", (done) => {
     request
-    .get("/api/users/:id")
-    .expect(200)
-    .expect("Content-Type", /json/)
-    .then(()=>{
-      server.close(()=>done())
-      
-    })
-    .catch((err) => done(err))
+      .get("/api/users/:id")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then(() => {
+        server.close(() => done())
 
-  })
+      })
+      .catch((err) => done(err))
 
+  });
 
-
-
-
-
+  it("should be able to delete account", (done) => {
+    request
+      .delete("/users/:id")
+      .expect(200)
+      .expect("Content-Type", /json/)
+      .then(() => {
+        server.close(() => done())
+      })
+      .catch((err) => done(err))
+  });
 
   it("should create a single user", (done) => {
     request
       .post("/api/users",)
-      .send({name: "test", login: "test", password: "test"})
+      .send({ name: "test", login: "test", password: "test" })
       .expect(200)
       .expect("Content-Type", /json/)
-      .end( (error) => {
-       
-         server.close(()=>{
-             if (error) return done(error);
-             
-         
-             done()
-            
+      .end((error) => {
+
+        server.close(() => {
+          if (error) return done(error);
+
+
+          done()
+
         })
-       
+
       })
-      
+
   });
 
   it("should login a single user", (done) => {
     request
       .post("/api/users/login",)
-      .send({login: "test", password: "test"})
+      .send({ login: "test", password: "test" })
       .expect(200)
       .expect("Content-Type", /json/)
-      .end( (error) => {
-       
-         server.close(()=>{
-             if (error) return done(error);
-             
-         
-             done()
-            
+      .end((error) => {
+
+        server.close(() => {
+          if (error) return done(error);
+
+
+          done()
+
         })
-       
+
       })
-      
+
   });
 
 });

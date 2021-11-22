@@ -1,4 +1,4 @@
-//Importera usermodel
+import UsersModel from "../database/db.database"
 import db from "../database/db.database"
 //Importera sequelize
 //importera user-routes
@@ -6,24 +6,26 @@ import db from "../database/db.database"
 //register user POST
 async function registerUser(req, res, next) {
     try {
-        const { name, password, login, role } = req.body;
-        if (!name || !password || !login ||!role) {
+        const { name, password, login, role  } = req.body
+        if (!name || !password || !login) {
             throw new Error()
         }
-        const user = await Usermodel.createUser()
-            res.json({
-                data: { message } 
-            });
+
+        await db.UsersModel.create({name, password, login, role})
+            return res.json({
+                data: { message: "success" }
+            })
     } catch (error) {
-        next(error);
+        next(error)
     }
 }
 //login user GET
 async function loginUser(req, res, next) { 
     try {
-        const { name, login, role } = req.body;
+        const { login, password } = req.body;
+        await db.UsersModel.authenticate(password, login)
         res.json({
-            data: { name, login, role }
+            data: { message: "success" }
         })
     } catch (error) {
         next(error)
@@ -33,7 +35,7 @@ async function loginUser(req, res, next) {
 async function deleteUser(req, res, next) {
     try {
         const { id } = req.params 
-        const user = await Usermodel.deleteUser(id)
+        await db.UsersModel.deleteUser(id)
         res.json({ message: `User successfully deleted` })
     } catch (error) {
         next(error)
@@ -44,7 +46,7 @@ async function deleteUser(req, res, next) {
 async function getUser(req, res, next) {
     try {
         const { id } = req.params //? Ta bort?
-        const user = await Usermodel.getUser(id);
+        await db.UsersModel.findByPk(id);
 
         if(!user) {
             throw new Error()
@@ -57,7 +59,7 @@ async function getUser(req, res, next) {
 
 async function getUsers(req, res, next) {
     try {
-        const users = await Usermodel.getUsers()
+        const users = await db.UsersModel.findAll()
             res.json({ data:users })
     } catch(error) {
         next(error)

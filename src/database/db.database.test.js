@@ -1,17 +1,12 @@
 import { jest } from "@jest/globals";
-import test from "./db.database.js";
+import db from "./db.database.js";
+
+await db.sync(db.sequelize, true);
 
 describe("db.database.js", () => {
   it("should have table for users", async () => {
     const query = "PRAGMA table_info(users);";
-    try {
-      const res = await test.UsersModel.query(query);
-      console.log(
-        res,
-        "resssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssponse"
-      );
-    } catch (error) {}
-    expect(true).toBe(false);
+    expect(() => db.UsersModel.query(query)).toBeTruthy();
   });
   // it("should have table for products", (done) => {
   //   function callback(_, row) {

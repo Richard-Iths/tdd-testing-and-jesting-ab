@@ -4,7 +4,7 @@ import db from "../database/db.database.js";
 async function getCart(req, res, next) {
     try{
         const { id } = req.params
-        const carts = await db.Carts.findByPk(id) //Var kommer användar id från?
+        const carts = await db.CartsModel.findByPk(id) //Var kommer användar id från?
         res.json({data: carts});
     } catch(error) {
         next(error);

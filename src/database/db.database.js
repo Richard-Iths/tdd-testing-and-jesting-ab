@@ -40,5 +40,6 @@ export default {
   sequelize,
   UsersModel,
   ProductsModel,
+  CartsModel,
   sync: init,
 };

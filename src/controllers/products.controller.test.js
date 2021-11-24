@@ -13,6 +13,7 @@ describe("products controller", () => {
     // dbMock.findAll = jest.spyOn(db.ProductsModel, "findAll");
     db.ProductsModel.findAll = jest.fn();
     db.ProductsModel.findByPk = jest.fn();
+    db.ProductsModel.create = jest.fn();
   });
 
   it("should return all products", async () => {
@@ -50,28 +51,42 @@ describe("products controller", () => {
     }
   });
   it("should throw an error when a product is not found", async () => {
-    const dbData = {
-      data: null,
-    };
+    const next = jest.fn();
     const req = {
       params: {
         id: "sad91239081",
       },
     };
 
-    const expected = JSON.stringify(dbData);
-
-    db.ProductsModel.findByPk.mockReturnValue(dbData);
-    res.json.mockReturnValue(JSON.stringify(db.ProductsModel.findByPk()));
+    db.ProductsModel.findByPk.mockReturnValue(null);
+    next.mockReturnValue(
+      JSON.stringify({ data: { message: "product not found" } })
+    );
 
     try {
-      const response = await productsController.getProduct(req, res);
-      expect(res.json).toHaveBeenCalled();
+      await productsController.getProduct(req, {}, next);
+    } catch (error) {
       expect(db.ProductsModel.findByPk).toHaveBeenCalled();
+      expect(next).toHaveBeenCalled();
+    }
+  });
+  it("should be able as an admin to post new products", async () => {
+    const req = {
+      body: {
+        price: 500,
+        name: "a product",
+      },
+    };
+    const expected = JSON.stringify({ message: "success" });
+    res.json.mockReturnValue(expected);
+
+    try {
+      const response = await productsController.postProduct(req, res);
+      expect(res.json).toHaveBeenCalled();
+      expect(db.ProductsModel.create).toHaveBeenCalled();
       expect(response).toBe(expected);
     } catch (error) {
-      console.log(error, "error");
-      expect(error).be(undefined);
+      expect(error).toBeFalsy();
     }
   });
 });

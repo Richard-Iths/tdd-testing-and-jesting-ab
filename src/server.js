@@ -1,6 +1,6 @@
 import express from "express";
 
-import router from "./routes/user-routes.js";
+import router from "./routes/index.js";
 import db from "./database/db.database.js";
 
 // import userRoutes from "./routes/user-routes";
@@ -16,7 +16,8 @@ app.get("/", (req, res, next) => {
   res.json({ message: "success" });
 });
 
-app.use("/api", router);
+app.use("/api/users", router.userRoutes);
+app.use("/api/carts", router.cartRoutes);
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port:${PORT}`);
 });

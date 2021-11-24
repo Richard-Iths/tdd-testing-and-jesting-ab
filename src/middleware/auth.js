@@ -17,13 +17,14 @@ const authRole = (req, res, next) => async (role) => {
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  const token = authorization.replace("bearer ", "");
+  const token = authorization.replace("Bearer ", "");
   try {
     if (!token) {
       throw new Error("no token");
     }
     const user = jwt.verify(token, process.env.JWT_SECRET || "secret");
     req.userId = user.id;
+    next();
   } catch (error) {
     next(error);
   }

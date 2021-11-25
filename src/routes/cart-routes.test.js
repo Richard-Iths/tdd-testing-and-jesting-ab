@@ -15,7 +15,9 @@ describe("cart endpoints", () => {
       { id: "e78f46de-6b6e-4c0c-8a88-dd460185869a" },
       "secret"
     );
-    const expected = { cart: [{ 1: "trasiga skor", 2: "strumpor" }] };
+    const expected = [
+      { user_id: "2180481084", product_id: "s98240891", amount: 2 },
+    ];
     db.CartsModel.findAll = jest.fn().mockReturnValue(expected);
     try {
       const res = await request
@@ -23,6 +25,9 @@ describe("cart endpoints", () => {
         .set("Authorization", "Bearer " + token);
       expect(res.status).toBe(200);
       expect(db.CartsModel.findAll).toHaveBeenCalled();
+      const resBodyData = res.body.data[0];
+      const expectedBodyData = expected[0];
+      expect(resBodyData.user_id).toBe(expectedBodyData.user_id);
     } catch (error) {
       expect(error).toBeFalsy();
     }

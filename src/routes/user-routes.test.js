@@ -5,8 +5,7 @@ import server from "../server";
 import db from "../database/db.database";
 await db.sync(db.sequelize, true);
 
-const request = supertest(server);
-
+const request = supertest(server)
 describe("user endpoints", () => {
   it("should return users", (done) => {
     request

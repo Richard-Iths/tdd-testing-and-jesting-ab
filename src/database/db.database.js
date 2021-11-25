@@ -41,5 +41,5 @@ export default {
   UsersModel,
   ProductsModel,
   CartsModel,
-  sync: init
-}
+  sync: init,
+};

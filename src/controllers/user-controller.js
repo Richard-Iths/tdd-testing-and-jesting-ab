@@ -1,4 +1,9 @@
+
+
+
+
 import db from "../database/db.database.js";
+
 //Importera sequelize
 //importera user-routes
 
@@ -32,20 +37,24 @@ async function loginUser(req, res, next) {
 }
 //delete user account DELETE
 async function deleteUser(req, res, next) {
-  try {
-    const { id } = req.params;
-    await db.UsersModel.deleteUser(id);
-    res.json({ message: `User successfully deleted` });
-  } catch (error) {
-    next(error);
-  }
+
+    try {
+        const { id } = req.params 
+        await db.UsersModel.destroy({where: {user_id: id}})
+        res.json({ message: `User successfully deleted` })
+    } catch (error) {
+        next(error)
+    }
+
 }
 
 //get user profile GET
 async function getUser(req, res, next) {
-  try {
-    const { id } = req.params; //? Ta bort?
-    await db.UsersModel.findByPk(id);
+
+    try {
+        const { id } = req.params //? Ta bort?
+        const user = await db.UsersModel.findByPk(id);
+
 
     if (!user) {
       throw new Error();

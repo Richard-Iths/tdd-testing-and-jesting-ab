@@ -1,25 +1,32 @@
-import express from "express";
+import express from 'express'
+import BaseException from './models/exceptions/base-exception.model.js'
+import router from './routes/index.js'
+import db from './database/db.database.js'
 
-import router from "./routes/index.js";
-import db from "./database/db.database.js";
+const app = express()
+const PORT = process.env.PORT || 3000
 
-// import userRoutes from "./routes/user-routes";
+await db.sync(db.sequelize, true)
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(express.json())
 
-await db.sync(db.sequelize, true);
+app.get('/', (req, res, next) => {
+  res.json({ message: 'success' })
+})
 
-app.use(express.json());
-// app.use("/users", userRoutes)
-app.get("/", (req, res, next) => {
-  res.json({ message: "success" });
-});
+app.use('/api/users', router.userRoutes)
+app.use('/api/carts', router.cartRoutes)
+app.use('/api/products', router.productsRoutes)
 
-app.use("/api/users", router.userRoutes);
-app.use("/api/carts", router.cartRoutes);
+app.use((err, req, res, next) => {
+  if (err instanceof BaseException) {
+    return res.status(err.statusCode).json({ data: { message: err.message } })
+  }
+  res.status(500).json({ data: { message: 'Something went wrong, please try again' } })
+})
+
 const server = app.listen(PORT, () => {
-  console.log(`Server is running on port:${PORT}`);
-});
+  console.log(`Server is running on port:${PORT}`)
+})
 
-export default server;
+export default server

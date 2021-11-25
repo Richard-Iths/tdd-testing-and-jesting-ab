@@ -3,6 +3,7 @@
 
 
 import db from "../database/db.database.js";
+import InvalidBodyException from "../models/exceptions/invalidBody-exception.model.js";
 
 //Importera sequelize
 //importera user-routes
@@ -12,7 +13,7 @@ async function registerUser(req, res, next) {
   try {
     const { name, password, login, role } = req.body;
     if (!name || !password || !login) {
-      throw new Error();
+      throw new InvalidBodyException("invalid body provided");
     }
 
     await db.UsersModel.create({ name, password, login, role });

@@ -6,14 +6,14 @@ import auth from "../middleware/auth.js";
 const router = new Router();
 
 router.get(
-  "/users",
+  "/",
   auth.auth,
   auth.authRole("admin"),
   userController.getUsers
 );
-router.get("/users/:id", userController.getUser);
-router.post("/users", userController.registerUser);
-router.post("/users/login", userController.loginUser);
-router.delete("/users/:id", userController.deleteUser);
+router.get("/:id", userController.getUser);
+router.post("/", userController.registerUser);
+router.post("/login", userController.loginUser);
+router.delete("/:id", userController.deleteUser);
 
 export default router;

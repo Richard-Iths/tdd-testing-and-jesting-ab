@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 export default (sequelize, Sequelize) => {
   const User = sequelize.define("User", {
     user_id: {
@@ -30,10 +32,27 @@ export default (sequelize, Sequelize) => {
   });
   User.authenticate = async (password, login) => {
     const user = await User.findOne({ where: { login } });
-    if (!user || user.password !== password) {
+    if (!user || !compareSync(password, user.password)) {
       throw new Error("invalid credentials");
     }
-    return user;
+    const token = jwt.sign(
+      { id: user.user_id },
+      process.env.JWT_SECRET || "secret"
+    );
+    return { user, token };
+  };
+
+  User.beforeCreate((user, options) => {
+    const hashedPassword = bcrypt.hashSync(user.password, 12);
+    user.password = hashedPassword;
+  });
+
+  User.validateToken = (token) => {
+    try {
+      return jwt.verify(token, process.env.JWT_SECRET || "secret");
+    } catch {
+      throw new Error();
+    }
   };
 
   return User;

@@ -167,6 +167,7 @@ describe("Products Routes", () => {
   it("Should be able as an admin to update product", async () => {
     db.UsersModel.findByPk.mockReturnValue({ role: "admin", user_id: "123" });
     db.ProductsModel.update = jest.fn();
+    db.ProductsModel.findByPk.mockReturnValue({ product_id: "ksajdkaljd" });
 
     const expected = { data: { message: "success" } };
     try {

@@ -56,17 +56,18 @@ describe("cart endpoints", () => {
     }
   });
 
-  it("should update cart items when user logged in", async () => {
-    const expected = [
-      { user_id: "456712389", product_id: "985462245", amount: 3 },
-    ];
-    db.CartsModel.create = jest.fn().mockReturnValue(expected);
+  it("should post cart items when user logged in", async () => {
+    db.CartsModel.bulkCreate = jest.fn();
+
     try {
       const res = await request
         .post("/api/carts")
-        .set("Authorization", "Bearer " + token);
+        .set("Authorization", "Bearer " + token)
+        .send({ products: [{ product_id: 123, amount: 2 }] });
+
+      console.log(res.body);
       expect(res.status).toBe(200);
-      expect(db.CartsModel.create).toHaveBeenCalled();
+      expect(db.CartsModel.bulkCreate).toHaveBeenCalled();
       const expectedMessage = { message: `Cart successfully updated` };
       expect(res.body).toStrictEqual(expectedMessage);
     } catch (error) {
@@ -75,14 +76,13 @@ describe("cart endpoints", () => {
   });
 
   it("should patch cart items when user logged in", async () => {
-    const expected = [
-      { user_id: "23423543634", product_id: "123124325245", amount: 35 },
-    ];
-    db.CartsModel.update = jest.fn().mockReturnValue(expected);
+    db.CartsModel.update = jest.fn();
+    db.CartsModel.destroy = jest.fn();
     try {
       const res = await request
-        .put("/api/carts")
-        .set("Authorization", "Bearer " + token);
+        .put("/api/carts/123")
+        .set("Authorization", "Bearer " + token)
+        .send({ amount: 2 });
       expect(res.status).toBe(200);
       expect(db.CartsModel.update).toHaveBeenCalled();
       const expectedMessage = { message: `Cart successfully patched` };

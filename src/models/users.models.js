@@ -32,7 +32,7 @@ export default (sequelize, Sequelize) => {
   });
   User.authenticate = async (password, login) => {
     const user = await User.findOne({ where: { login } });
-    if (!user || !compareSync(password, user.password)) {
+    if (!user || !bcrypt.compareSync(password, user.password)) {
       throw new Error("invalid credentials");
     }
     const token = jwt.sign(

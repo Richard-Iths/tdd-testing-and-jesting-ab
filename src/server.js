@@ -23,9 +23,14 @@ app.use((err, req, res, next) => {
   if (err instanceof BaseException) {
     return res.status(err.statusCode).json({ data: { message: err.message } });
   }
-  res
-    .status(500)
-    .json({ data: { message: "Something went wrong, please try again" } });
+  res.status(500).json({
+    data: {
+      message:
+        process.env.NODE_ENV === "dev"
+          ? err.message
+          : "Something went wrong, please try again",
+    },
+  });
 });
 
 if (process.env.NODE_ENV !== "test") {

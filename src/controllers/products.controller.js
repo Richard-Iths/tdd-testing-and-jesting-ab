@@ -53,12 +53,13 @@ const putProduct = async (req, res, next) => {
     if (!data.name && !data.price) {
       throw new InvalidBodyException("price or name needs to be included");
     }
-    await ProductsModel.update(
-      { ...data },
-      {
-        where: { product_id: id },
-      }
-    );
+    const product = await ProductsModel.findByPk(id);
+    if (!product) {
+      throw new NotFoundException("product not found");
+    }
+    await ProductsModel.update(Object.assign({}, { ...product, ...data }), {
+      where: { product_id: id },
+    });
     return res.json({ data: { message: "success" } });
   } catch (error) {
     next(error);

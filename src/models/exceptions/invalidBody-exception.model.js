@@ -1,4 +1,4 @@
-import BaseException from "./base-exception.model";
+import BaseException from "./base-exception.model.js";
 
 export default class InvalidBodyException extends BaseException {
   constructor(message) {

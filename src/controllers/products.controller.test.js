@@ -124,10 +124,11 @@ describe("products controller", () => {
     };
     const expected = JSON.stringify({ message: "success" });
     res.json.mockReturnValue(expected);
-
+    db.ProductsModel.findByPk.mockReturnValue({ product_id: "ksajdkaljd" });
     try {
       const response = await productsController.putProduct(req, res);
       expect(db.ProductsModel.update).toHaveBeenCalled();
+      expect(db.ProductsModel.findByPk).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalled();
       expect(response).toBe(expected);
     } catch (error) {

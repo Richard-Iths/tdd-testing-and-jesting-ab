@@ -11,8 +11,8 @@ describe("Products Routes", () => {
     token = jwt.sign({ id: "e78f46de-6b6e-4c0c-8a88-dd460185869a" }, "secret");
     db.UsersModel.findByPk = jest.fn();
   });
-  afterEach(() => {
-    server.close();
+  afterEach(async () => {
+    // server.close();
     jest.resetAllMocks();
   });
 
@@ -167,6 +167,7 @@ describe("Products Routes", () => {
   it("Should be able as an admin to update product", async () => {
     db.UsersModel.findByPk.mockReturnValue({ role: "admin", user_id: "123" });
     db.ProductsModel.update = jest.fn();
+    db.ProductsModel.findByPk.mockReturnValue({ product_id: "ksajdkaljd" });
 
     const expected = { data: { message: "success" } };
     try {

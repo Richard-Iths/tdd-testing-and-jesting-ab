@@ -8,13 +8,12 @@ import jwt from "jsonwebtoken";
 await db.sync(db.sequelize, true);
 
 const request = supertest(server);
-let token;
 describe("cart endpoints", () => {
+  let token;
   beforeEach(() => {
     token = jwt.sign({ id: "e78f46de-6b6e-4c0c-8a88-dd460185869a" }, "secret");
   });
   afterEach(() => {
-    server.close();
     jest.resetAllMocks();
   });
   it("should get cart items when user logged in", async () => {
@@ -84,10 +83,10 @@ describe("cart endpoints", () => {
       const res = await request
         .put("/api/carts")
         .set("Authorization", "Bearer " + token);
-        expect(res.status).toBe(200)
-        expect(db.CartsModel.update).toHaveBeenCalled()
-        const expectedMessage = {message: `Cart successfully patched`}
-        expect(res.body).toStrictEqual(expectedMessage)
+      expect(res.status).toBe(200);
+      expect(db.CartsModel.update).toHaveBeenCalled();
+      const expectedMessage = { message: `Cart successfully patched` };
+      expect(res.body).toStrictEqual(expectedMessage);
     } catch (error) {
       expect(error).toBeFalsy();
     }

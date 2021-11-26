@@ -11,8 +11,8 @@ describe("Products Routes", () => {
     token = jwt.sign({ id: "e78f46de-6b6e-4c0c-8a88-dd460185869a" }, "secret");
     db.UsersModel.findByPk = jest.fn();
   });
-  afterEach(() => {
-    server.close();
+  afterEach(async () => {
+    // server.close();
     jest.resetAllMocks();
   });
 

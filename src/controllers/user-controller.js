@@ -1,7 +1,3 @@
-
-
-
-
 import db from "../database/db.database.js";
 import InvalidBodyException from "../models/exceptions/invalidBody-exception.model.js";
 
@@ -28,9 +24,12 @@ async function registerUser(req, res, next) {
 async function loginUser(req, res, next) {
   try {
     const { login, password } = req.body;
-    await db.UsersModel.authenticate(password, login);
-    res.json({
-      data: { message: "success" },
+    if (!login || !password) {
+      throw new InvalidBodyException("login and password is required");
+    }
+    const token = await db.UsersModel.authenticate(password, login);
+    return res.json({
+      data: { token },
     });
   } catch (error) {
     next(error);
@@ -38,29 +37,26 @@ async function loginUser(req, res, next) {
 }
 //delete user account DELETE
 async function deleteUser(req, res, next) {
-
-    try {
-        const { id } = req.params 
-        await db.UsersModel.destroy({where: {user_id: id}})
-        res.json({ message: `User successfully deleted` })
-    } catch (error) {
-        next(error)
-    }
-
+  try {
+    const { userId } = req;
+    await db.UsersModel.destroy({ where: { user_id: userId } });
+    res.json({ message: `User successfully deleted` });
+  } catch (error) {
+    next(error);
+  }
 }
 
 //get user profile GET
 async function getUser(req, res, next) {
-
-    try {
-        const { id } = req.params //? Ta bort?
-        const user = await db.UsersModel.findByPk(id);
-
+  try {
+    const { userId } = req; //? Ta bort?
+    const user = await db.UsersModel.findByPk(userId);
 
     if (!user) {
       throw new Error();
     }
-    res.json({ user });
+    delete user.password;
+    res.json({ data: user });
   } catch (error) {
     next(error);
   }

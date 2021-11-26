@@ -39,7 +39,7 @@ export default (sequelize, Sequelize) => {
       { id: user.user_id },
       process.env.JWT_SECRET || "secret"
     );
-    return { user, token };
+    return { token };
   };
 
   User.beforeCreate((user, options) => {

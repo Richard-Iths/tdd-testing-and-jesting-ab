@@ -55,8 +55,7 @@ async function getUser(req, res, next) {
     if (!user) {
       throw new Error();
     }
-    delete user.password;
-    res.json({ data: user });
+    res.json({ data: user.toObj() });
   } catch (error) {
     next(error);
   }
@@ -65,7 +64,10 @@ async function getUser(req, res, next) {
 async function getUsers(req, res, next) {
   try {
     const users = await db.UsersModel.findAll();
-    res.json({ data: users });
+    const modifiedUsers = users.map((user) => {
+      return user.toObj();
+    });
+    res.json({ data: modifiedUsers });
   } catch (error) {
     next(error);
   }

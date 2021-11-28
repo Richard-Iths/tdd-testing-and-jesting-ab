@@ -50,9 +50,18 @@ describe("user endpoints", () => {
       expect(error).toBeFalsy();
     }
   });
-  it("should get all user as an admin", async () => {
-    const testData = [{ user_id: "123131", login: "test" }];
-    const expectMessage = { data: testData };
+  it("should get all user without password as an admin", async () => {
+    const user = {
+      user_id: "123131",
+      login: "test",
+      password: "237198371",
+      toObj: function () {
+        delete this.password;
+        return this;
+      },
+    };
+    const testData = [user];
+    const expectMessage = { data: [{ user_id: "123131", login: "test" }] };
     db.UsersModel.findAll = jest.fn().mockReturnValue(testData);
     db.UsersModel.findByPk = jest.fn().mockReturnValue({ role: "admin" });
 
@@ -132,16 +141,26 @@ describe("user endpoints", () => {
       expect(error).toBeFalsy();
     }
   });
-  it("should get own profile", async () => {
+  it("should get own profile without password field", async () => {
     const testData = {
       login: "test",
       password: "test",
       role: "user",
       name: "test",
+
+      toObj: function () {
+        delete this.password;
+        return this;
+      },
     };
     db.UsersModel.findByPk = jest.fn().mockReturnValue(testData);
-    delete testData.password;
-    const expectMessage = { data: testData };
+    const expectMessage = {
+      data: {
+        login: "test",
+        role: "user",
+        name: "test",
+      },
+    };
     try {
       const res = await request
         .get("/api/users/profile")

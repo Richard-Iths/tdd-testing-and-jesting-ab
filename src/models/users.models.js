@@ -55,7 +55,8 @@ export default (sequelize, Sequelize) => {
     }
   };
   User.prototype.toObj = function () {
-    delete this.password;
+    delete this.dataValues.password;
+    return this;
   };
   return User;
 };

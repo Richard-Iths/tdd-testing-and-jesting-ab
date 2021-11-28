@@ -17,18 +17,23 @@ async function getCart(req, res, next) {
 async function postCart(req, res, next) {
   try {
     const { userId } = req;
-    const { products } = req.body;
-
-    if (!products) {
+    const { product } = req.body;
+    if (!product || !product.product_id) {
       throw new InvalidBodyException("no products provided");
     }
-    const modifiedProducts = products.map((product) => ({
+    const modifiedProduct = {
       ...product,
+      amount: 1,
       user_id: userId,
-    }));
-    await db.CartsModel.bulkCreate(modifiedProducts, {
-      updateOnDuplicate: ["user_id", "product_id", "amount"],
+    };
+    const existingProduct = await db.CartsModel.findOne({
+      where: { user_id: userId, product_id: product.product_id },
     });
+    if (existingProduct) {
+      throw new InvalidBodyException("product exist cannot post");
+    }
+    await db.CartsModel.create(modifiedProduct);
+
     res.json({ message: `Cart successfully updated` });
   } catch (error) {
     next(error);

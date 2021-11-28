@@ -57,18 +57,44 @@ describe("cart endpoints", () => {
   });
 
   it("should post cart items when user logged in", async () => {
-    db.CartsModel.bulkCreate = jest.fn();
+    db.CartsModel.create = jest.fn();
+    db.CartsModel.findOne = jest.fn();
 
     try {
       const res = await request
         .post("/api/carts")
         .set("Authorization", "Bearer " + token)
-        .send({ products: [{ product_id: 123, amount: 2 }] });
+        .send({ product: { product_id: 123 } });
+
+      expect(res.status).toBe(200);
+      expect(db.CartsModel.create).toHaveBeenCalled();
+      expect(db.CartsModel.findOne).toHaveBeenCalled();
+      const expectedMessage = { message: `Cart successfully updated` };
+      expect(res.body).toStrictEqual(expectedMessage);
+    } catch (error) {
+      expect(error).toBeFalsy();
+    }
+  });
+
+  it("should return error when posting a product that exist", async () => {
+    db.CartsModel.create = jest.fn();
+    db.CartsModel.findOne = jest
+      .fn()
+      .mockReturnValue({ user_id: 123, product_id: 123, amount: 2 });
+
+    try {
+      const res = await request
+        .post("/api/carts")
+        .set("Authorization", "Bearer " + token)
+        .send({ product: { product_id: 123 } });
 
       console.log(res.body);
-      expect(res.status).toBe(200);
-      expect(db.CartsModel.bulkCreate).toHaveBeenCalled();
-      const expectedMessage = { message: `Cart successfully updated` };
+      expect(res.status).toBe(400);
+      expect(db.CartsModel.create).not.toHaveBeenCalled();
+      expect(db.CartsModel.findOne).toHaveBeenCalled();
+      const expectedMessage = {
+        data: { message: `product exist cannot post` },
+      };
       expect(res.body).toStrictEqual(expectedMessage);
     } catch (error) {
       expect(error).toBeFalsy();

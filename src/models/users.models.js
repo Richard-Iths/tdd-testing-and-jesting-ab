@@ -54,6 +54,8 @@ export default (sequelize, Sequelize) => {
       throw new Error();
     }
   };
-
+  User.prototype.toObj = function () {
+    delete this.password;
+  };
   return User;
 };

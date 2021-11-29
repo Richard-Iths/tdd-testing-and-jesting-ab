@@ -7,8 +7,10 @@ import { config } from "dotenv";
 config();
 const app = express();
 const PORT = process.env.PORT || 3000;
-
-await db.sync(db.sequelize, false);
+if (process.env.NODE_ENV !== "test") {
+  console.log("running");
+  await db.sync(db.sequelize, false);
+}
 
 app.use(express.json());
 app.get("/", (req, res, next) => {

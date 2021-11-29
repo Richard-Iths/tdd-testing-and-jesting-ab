@@ -1,11 +1,8 @@
 import { jest } from "@jest/globals";
 import supertest from "supertest";
-import router from "./cart-routes";
 import server from "../server.js";
 import db from "../database/db.database.js";
 import jwt from "jsonwebtoken";
-
-await db.sync(db.sequelize, true);
 
 const request = supertest(server);
 describe("cart endpoints", () => {
@@ -88,7 +85,6 @@ describe("cart endpoints", () => {
         .set("Authorization", "Bearer " + token)
         .send({ product: { product_id: 123 } });
 
-      console.log(res.body);
       expect(res.status).toBe(400);
       expect(db.CartsModel.create).not.toHaveBeenCalled();
       expect(db.CartsModel.findOne).toHaveBeenCalled();

@@ -50,12 +50,14 @@ async function deleteUser(req, res, next) {
 async function getUser(req, res, next) {
   try {
     const { userId } = req; //? Ta bort?
-    const user = await db.UsersModel.findByPk(userId);
+    const user = await db.UsersModel.findByPk(userId, {
+      attributes: { exclude: ["password"] },
+    });
 
     if (!user) {
       throw new Error();
     }
-    res.json({ data: user.toObj() });
+    res.json({ data: user });
   } catch (error) {
     next(error);
   }
@@ -63,11 +65,10 @@ async function getUser(req, res, next) {
 
 async function getUsers(req, res, next) {
   try {
-    const users = await db.UsersModel.findAll();
-    const modifiedUsers = users.map((user) => {
-      return user.toObj();
+    const users = await db.UsersModel.findAll({
+      attributes: { exclude: ["password"] },
     });
-    res.json({ data: modifiedUsers });
+    res.json({ data: users });
   } catch (error) {
     next(error);
   }
